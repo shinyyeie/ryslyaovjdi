@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ryslyaovjdi</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:#1a1a1a;min-height:100vh}
+.navbar{background:#fff;border-bottom:1px solid #e5e5e5;padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:1000}
+.navbar-brand{font-size:20px;font-weight:700;color:#1a1a1a;text-decoration:none;letter-spacing:-1px}
+.navbar-menu{display:flex;gap:12px;align-items:center}
+.btn{padding:8px 18px;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;text-decoration:none;display:inline-block;border:1px solid #d4d4d4;background:#fff;color:#1a1a1a;transition:all .2s}
+.btn:hover{background:#f5f5f5;border-color:#b0b0b0}
+.btn-primary{background:#1a1a1a;color:#fff;border:1px solid #1a1a1a}
+.btn-primary:hover{background:#333}
+.btn-danger{background:#fff;color:#dc2626;border:1px solid #dc2626}
+.btn-danger:hover{background:#fef2f2}
+.container{max-width:960px;margin:0 auto;padding:32px 20px;width:100%}
+.announcement-bar{background:#fafafa;border:1px solid #e5e5e5;border-radius:8px;padding:20px;margin-bottom:32px}
+.announcement-item{padding:10px 0;border-bottom:1px solid #eaeaea;font-size:14px;color:#4a4a4a;display:flex;justify-content:space-between}
+.announcement-item:last-child{border-bottom:none}
+.announcement-time{font-size:11px;color:#999}
+.form-container{max-width:420px;margin:60px auto;background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:40px}
+.form-title{font-size:24px;font-weight:700;margin-bottom:6px}
+.form-subtitle{font-size:14px;color:#777;margin-bottom:28px}
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:13px;font-weight:600;color:#555;margin-bottom:6px}
+.form-input{width:100%;padding:10px 14px;border:1px solid #d4d4d4;border-radius:6px;font-size:14px}
+.form-input:focus{outline:none;border-color:#1a1a1a;box-shadow:0 0 0 3px rgba(0,0,0,.05)}
+.error-message{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:16px;display:none}
+.success-message{background:#f0fdf4;border:1px solid #bbf7d0;color:#16a34a;padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:16px;display:none}
+.online-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+.online-dot.online{background:#22c55e}
+.online-dot.offline{background:#d4d4d4}
+.chat-container{display:flex;height:calc(100vh - 56px)}
+.chat-sidebar{width:300px;border-right:1px solid #e5e5e5;overflow-y:auto;background:#fafafa;padding:16px}
+.chat-main{flex:1;display:flex;flex-direction:column}
+.messages-area{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:8px}
+.message-bubble{max-width:65%;padding:8px 14px;border-radius:10px;font-size:14px;line-height:1.4;word-wrap:break-word}
+.message-sent{align-self:flex-end;background:#1a1a1a;color:#fff}
+.message-received{align-self:flex-start;background:#f0f0f0;color:#1a1a1a}
+.message-username{font-size:11px;font-weight:600;margin-bottom:2px;opacity:.8}
+.message-input-area{padding:12px 20px;border-top:1px solid #e5e5e5;display:flex;gap:10px}
+.message-input{flex:1;padding:10px 14px;border:1px solid #d4d4d4;border-radius:8px;font-size:14px}
+.btn-send{padding:10px 20px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px}
+.chat-item{padding:10px 12px;border-radius:6px;cursor:pointer;margin-bottom:4px;font-size:13px;display:block;text-decoration:none;color:#1a1a1a;border:1px solid #e5e5e5}
+.chat-item:hover{background:#f0f0f0}
+.user-chip{padding:6px 12px;border:1px solid #d4d4d4;border-radius:20px;font-size:12px;cursor:pointer;display:inline-block;margin:2px}
+.user-chip.selected{background:#1a1a1a;color:#fff}
+table{width:100%;border-collapse:collapse;margin-top:16px}
+th,td{padding:10px;text-align:left;border-bottom:1px solid #e5e5e5;font-size:13px}
+th{font-weight:600;color:#555;background:#fafafa}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center}
+.modal-content{background:#fff;border-radius:12px;padding:32px;width:400px;max-width:90%}
+.modal-title{font-size:20px;font-weight:700;margin-bottom:20px}
+</style>
+</head>
+<body>
+<nav class="navbar">
+<a href="#" onclick="showPage('home')" class="navbar-brand">ryslyaovjdi</a>
+<div class="navbar-menu" id="navMenu"></div>
+</nav>
+<div id="app"></div>
+<div class="modal" id="modal">
+<div class="modal-content" id="modalContent"></div>
+</div>
+<script>
+const ADMIN_CODE = '74522i2sO4Eq0';
+let currentUser = null;
+let currentPage = 'home';
+let currentChat = null;
+let refreshInterval = null;
+
+function sha256(str) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(str);
+    return crypto.subtle.digest('SHA-256', data).then(hash => {
+        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+    });
+}
+
+function getUsers() {
+    return JSON.parse(localStorage.getItem('ryslyaov_users') || '{}');
+}
+
+function saveUsers(users) {
+    localStorage.setItem('ryslyaov_users', JSON.stringify(users));
+}
+
+function getAnnouncements() {
+    return JSON.parse(localStorage.getItem('ryslyaov_announcements') || '[]');
+}
+
+function saveAnnouncements(anns) {
+    localStorage.setItem('ryslyaov_announcements', JSON.stringify(anns));
+}
+
+function getChats() {
+    return JSON.parse(localStorage.getItem('ryslyaov_chats') || '{}');
+}
+
+function saveChats(chats) {
+    localStorage.setItem('ryslyaov_chats', JSON.stringify(chats));
+}
+
+function getMessages(chatId) {
+    const chats = getChats();
+    return chats[chatId] ? chats[chatId].messages || [] : [];
+}
+
+function addMessage(chatId, msg) {
+    const chats = getChats();
+    if (!chats[chatId]) return;
+    if (!chats[chatId].messages) chats[chatId].messages = [];
+    chats[chatId].messages.push(msg);
+    if (chats[chatId].messages.length > 100) chats[chatId].messages = chats[chatId].messages.slice(-100);
+    saveChats(chats);
+}
+
+function getOnlineUsers() {
+    return JSON.parse(localStorage.getItem('ryslyaov_online') || '[]');
+}
+
+function setOnline(username) {
+    let online = getOnlineUsers();
+    if (!online.includes(username)) online.push(username);
+    localStorage.setItem('ryslyaov_online', JSON.stringify(online));
+}
+
+function setOffline(username) {
+    let online = getOnlineUsers();
+    online = online.filter(u => u !== username);
+    localStorage.setItem('ryslyaov_online', JSON.stringify(online));
+}
+
+function isOnline(username) {
+    return getOnlineUsers().includes(username);
+}
+
+function renderNav() {
+    const nav = document.getElementById('navMenu');
+    if (currentUser) {
+        nav.innerHTML = `
+            <span style="font-size:13px;color:#555;">${currentUser.nickname}</span>
+            <a href="#" onclick="showPage('profile')" class="btn">Профиль</a>
+            <a href="#" onclick="showPage('chats')" class="btn">Чаты</a>
+            <a href="https://t.me/ryslaovgpt" target="_blank" class="btn">Поддержка</a>
+            <a href="#" onclick="logout()" class="btn btn-danger">Выход</a>
+        `;
+    } else {
+        nav.innerHTML = `
+            <a href="#" onclick="showPage('login')" class="btn">Вход</a>
+            <a href="#" onclick="showPage('register')" class="btn btn-primary">Регистрация</a>
+            <a href="https://t.me/ryslaovgpt" target="_blank" class="btn">Поддержка</a>
+        `;
+    }
+}
+
+function showPage(page) {
+    currentPage = page;
+    renderNav();
+    const app = document.getElementById('app');
+    switch(page) {
+        case 'home': renderHome(); break;
+        case 'login': renderLogin(); break;
+        case 'register': renderRegister(); break;
+        case 'profile': renderProfile(); break;
+        case 'chats': renderChats(); break;
+        case 'admin': renderAdmin(); break;
+    }
+}
+
+function renderHome() {
+    const anns = getAnnouncements();
+    let annHTML = '';
+    if (anns.length > 0) {
+        anns.slice(-10).reverse().forEach(a => {
+            annHTML += `<div class="announcement-item"><span>${a.text}</span><span class="announcement-time">${a.time} | ${a.author}</span></div>`;
+        });
+    } else {
+        annHTML = '<div class="announcement-item">Нет объявлений</div>';
+    }
+    document.getElementById('app').innerHTML = `
+        <div class="container">
+            <div class="announcement-bar">${annHTML}</div>
+            <h2 style="font-weight:600;margin-bottom:16px;">Добро пожаловать в ryslyaovjdi</h2>
+            <p style="color:#777;font-size:14px;">Платформа для общения. Войдите или зарегистрируйтесь, чтобы начать.</p>
+            <p style="margin-top:16px;font-size:13px;color:#555;">Пользователей онлайн: ${getOnlineUsers().length}</p>
+        </div>
+    `;
+}
+
+function renderLogin() {
+    document.getElementById('app').innerHTML = `
+        <div class="form-container">
+            <div class="form-title">Вход</div>
+            <div class="form-subtitle">Войдите в аккаунт ryslyaovjdi</div>
+            <div class="error-message" id="loginError"></div>
+            <form onsubmit="login(event)">
+                <div class="form-group">
+                    <label class="form-label">Логин</label>
+                    <input type="text" id="loginUsername" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" id="loginPassword" class="form-input" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width:100%;padding:12px;border-radius:6px;">Войти</button>
+            </form>
+            <p style="text-align:center;margin-top:20px;font-size:13px;color:#777;">Нет аккаунта? <a href="#" onclick="showPage('register')" style="color:#1a1a1a;font-weight:600;">Зарегистрироваться</a></p>
+            <p style="text-align:center;margin-top:12px;font-size:13px;"><a href="#" onclick="showPage('home')" style="color:#999;">На главную</a></p>
+        </div>
+    `;
+}
+
+async function login(e) {
+    e.preventDefault();
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const users = getUsers();
+    const errorEl = document.getElementById('loginError');
+    
+    if (!users[username]) {
+        errorEl.textContent = 'Пользователь не найден';
+        errorEl.style.display = 'block';
+        return;
+    }
+    
+    const hash = await sha256(password);
+    if (users[username].password !== hash) {
+        errorEl.textContent = 'Неверный пароль';
+        errorEl.style.display = 'block';
+        return;
+    }
+    
+    currentUser = { username, ...users[username] };
+    setOnline(username);
+    showPage('home');
+}
+
+function renderRegister() {
+    document.getElementById('app').innerHTML = `
+        <div class="form-container">
+            <div class="form-title">Регистрация</div>
+            <div class="form-subtitle">Создайте аккаунт ryslyaovjdi</div>
+            <div class="error-message" id="regError"></div>
+            <form onsubmit="register(event)">
+                <div class="form-group">
+                    <label class="form-label">Логин</label>
+                    <input type="text" id="regUsername" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Пароль (минимум 6 символов)</label>
+                    <input type="password" id="regPassword" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Подтвердите пароль</label>
+                    <input type="password" id="regConfirm" class="form-input" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width:100%;padding:12px;border-radius:6px;">Зарегистрироваться</button>
+            </form>
+            <p style="text-align:center;margin-top:20px;font-size:13px;color:#777;">Уже есть аккаунт? <a href="#" onclick="showPage('login')" style="color:#1a1a1a;font-weight:600;">Войти</a></p>
+            <p style="text-align:center;margin-top:12px;font-size:13px;"><a href="#" onclick="showPage('home')" style="color:#999;">На главную</a></p>
+        </div>
+    `;
+}
+
+async function register(e) {
+    e.preventDefault();
+    const username = document.getElementById('regUsername').value.trim();
+    const password = document.getElementById('regPassword').value;
+    const confirm = document.getElementById('regConfirm').value;
+    const errorEl = document.getElementById('regError');
+    
+    if (!username || !password || !confirm) {
+        errorEl.textContent = 'Все поля обязательны';
+        errorEl.style.display = 'block';
+        return;
+    }
+    if (password !== confirm) {
+        errorEl.textContent = 'Пароли не совпадают';
+        errorEl.style.display = 'block';
+        return;
+    }
+    if (password.length < 6) {
+        errorEl.textContent = 'Пароль должен быть не менее 6 символов';
+        errorEl.style.display = 'block';
+        return;
+    }
+    
+    const users = getUsers();
+    if (users[username]) {
+        errorEl.textContent = 'Пользователь уже существует';
+        errorEl.style.display = 'block';
+        return;
+    }
+    
+    const hash = await sha256(password);
+    users[username] = {
+        password: hash,
+        nickname: username,
+        description: '',
+        isAdmin: false
+    };
+    saveUsers(users);
+    showPage('login');
+}
+
+function logout() {
+    if (currentUser) {
+        setOffline(currentUser.username);
+    }
+    currentUser = null;
+    showPage('home');
+}
+
+function renderProfile() {
+    if (!currentUser) { showPage('login'); return; }
+    const users = getUsers();
+    const user = users[currentUser.username];
+    document.getElementById('app').innerHTML = `
+        <div class="form-container" style="max-width:500px;">
+            <div class="form-title">Профиль</div>
+            <div class="error-message" id="profError"></div>
+            <div class="success-message" id="profSuccess"></div>
+            <form onsubmit="updateProfile(event)">
+                <div class="form-group">
+                    <label class="form-label">Никнейм</label>
+                    <input type="text" id="profNickname" class="form-input" value="${user.nickname}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Описание</label>
+                    <input type="text" id="profDesc" class="form-input" value="${user.description || ''}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Текущий пароль (для смены пароля)</label>
+                    <input type="password" id="profOldPass" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Новый пароль</label>
+                    <input type="password" id="profNewPass" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Подтвердите новый пароль</label>
+                    <input type="password" id="profNewConfirm" class="form-input">
+                </div>
+                <button type="submit" class="btn-primary" style="width:100%;padding:12px;border-radius:6px;">Сохранить изменения</button>
+            </form>
+            <p style="text-align:center;margin-top:20px;font-size:13px;"><a href="#" onclick="showPage('admin')" style="color:#999;">Админ-панель</a></p>
+        </div>
+    `;
+}
+
+async function updateProfile(e) {
+    e.preventDefault();
+    const users = getUsers();
+    const user = users[currentUser.username];
+    const newNick = document.getElementById('profNickname').value.trim();
+    const newDesc = document.getElementById('profDesc').value.trim();
+    const oldPass = document.getElementById('profOldPass').value;
+    const newPass = document.getElementById('profNewPass').value;
+    const newConfirm = document.getElementById('profNewConfirm').value;
+    const errEl = document.getElementById('profError');
+    const sucEl = document.getElementById('profSuccess');
+    
+    if (newNick) user.nickname = newNick;
+    user.description = newDesc;
+    
+    if (oldPass && newPass) {
+        const oldHash = await sha256(oldPass);
+        if (user.password !== oldHash) {
+            errEl.textContent = 'Неверный текущий пароль';
+            errEl.style.display = 'block';
+            return;
+        }
+        if (newPass !== newConfirm) {
+            errEl.textContent = 'Новые пароли не совпадают';
+            errEl.style.display = 'block';
+            return;
+        }
+        if (newPass.length < 6) {
+            errEl.textContent = 'Новый пароль должен быть не менее 6 символов';
+            errEl.style.display = 'block';
+            return;
+        }
+        user.password = await sha256(newPass);
+    }
+    
+    users[currentUser.username] = user;
+    saveUsers(users);
+    currentUser = { username: currentUser.username, ...user };
+    sucEl.textContent = 'Профиль обновлен';
+    sucEl.style.display = 'block';
+    errEl.style.display = 'none';
+    setTimeout(() => { sucEl.style.display = 'none'; }, 2000);
+}
+
+function renderAdmin() {
+    if (!currentUser) { showPage('login'); return; }
+    const users = getUsers();
+    if (!users[currentUser.username].isAdmin) {
+        document.getElementById('app').innerHTML = `
+            <div class="form-container">
+                <div class="form-title">Доступ к админ-панели</div>
+                <div class="error-message" id="adminError"></div>
+                <form onsubmit="checkAdminCode(event)">
+                    <input type="password" id="adminCodeInput" class="form-input" placeholder="Введите код доступа" required>
+                    <button type="submit" class="btn-primary" style="width:100%;padding:12px;border-radius:6px;margin-top:16px;">Подтвердить</button>
+                </form>
+                <p style="text-align:center;margin-top:12px;"><a href="#" onclick="showPage('profile')" style="color:#999;">Назад в профиль</a></p>
+            </div>
+        `;
+    } else {
+        renderAdminPanel();
+    }
+}
+
+function checkAdminCode(e) {
+    e.preventDefault();
+    const code = document.getElementById('adminCodeInput').value;
+    if (code === ADMIN_CODE) {
+        const users = getUsers();
+        users[currentUser.username].isAdmin = true;
+        saveUsers(users);
+        currentUser.isAdmin = true;
+        renderAdminPanel();
+    } else {
+        document.getElementById('adminError').textContent = 'Неверный код доступа';
+        document.getElementById('adminError').style.display = 'block';
+    }
+}
+
+function renderAdminPanel() {
+    const users = getUsers();
+    const anns = getAnnouncements();
+    const online = getOnlineUsers();
+    
+    let userRows = '';
+    for (let [username, data] of Object.entries(users)) {
+        userRows += `
+            <tr>
+                <td>${username}</td>
+                <td style="font-size:10px;">${data.password.substring(0,20)}...</td>
+                <td>${data.nickname}</td>
+                <td><span class="online-dot ${online.includes(username)?'online':'offline'}"></span>${online.includes(username)?'Онлайн':'Офлайн'}</td>
+                <td>${data.isAdmin?'Да':'Нет'}</td>
+            </tr>
+        `;
+    }
+    
+    let annHTML = '';
+    anns.slice(-20).reverse().forEach(a => {
+        annHTML += `<div class="announcement-item"><span>${a.text}</span><span class="announcement-time">${a.time} | ${a.author}</span></div>`;
+    });
+    
+    document.getElementById('app').innerHTML = `
+        <div class="container">
+            <div class="section" style="background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:20px;margin-bottom:20px;">
+                <div style="font-size:16px;font-weight:600;margin-bottom:14px;">Отправить объявление на главное табло</div>
+                <form onsubmit="addAnnouncement(event)" style="display:flex;gap:10px;">
+                    <input type="text" id="announcementText" class="form-input" style="flex:1;" placeholder="Текст объявления" required>
+                    <button type="submit" class="btn-primary">Отправить</button>
+                </form>
+            </div>
+            <div class="section" style="background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:20px;margin-bottom:20px;">
+                <div style="font-size:16px;font-weight:600;margin-bottom:14px;">Объявления</div>
+                ${annHTML || '<p style="color:#999;font-size:13px;">Нет объявлений</p>'}
+            </div>
+            <div class="section" style="background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:20px;">
+                <div style="font-size:16px;font-weight:600;margin-bottom:14px;">База данных пользователей</div>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <tr><th>Логин</th><th>Пароль (SHA-256)</th><th>Никнейм</th><th>Онлайн</th><th>Админ</th></tr>
+                        ${userRows}
+                    </table>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function addAnnouncement(e) {
+    e.preventDefault();
+    const text = document.getElementById('announcementText').value.trim();
+    if (!text) return;
+    const anns = getAnnouncements();
+    anns.push({
+        text: text,
+        author: currentUser.nickname,
+        time: new Date().toLocaleString('ru-RU')
+    });
+    saveAnnouncements(anns);
+    renderAdminPanel();
+}
+
+function renderChats() {
+    if (!currentUser) { showPage('login'); return; }
+    const chats = getChats();
+    const users = getUsers();
+    const online = getOnlineUsers();
+    
+    let myChats = '';
+    for (let [chatId, chat] of Object.entries(chats)) {
+        if (chat.participants && chat.participants.includes(currentUser.username)) {
+            myChats += `<a href="#" onclick="openChat('${chatId}')" class="chat-item">${chat.name || chatId}</a>`;
+        }
+    }
+    
+    let userChips = '';
+    for (let [username, data] of Object.entries(users)) {
+        if (username !== currentUser.username) {
+            userChips += `<label class="user-chip" onclick="this.classList.toggle('selected')">
+                <span class="online-dot ${online.includes(username)?'online':'offline'}"></span>
+                ${data.nickname}
+                <input type="checkbox" name="chatParticipants" value="${username}" style="display:none;">
+            </label>`;
+        }
+    }
+    
+    document.getElementById('app').innerHTML = `
+        <div class="container">
+            <div class="section" style="background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:20px;margin-bottom:20px;">
+                <div style="font-size:16px;font-weight:600;margin-bottom:14px;">Ваши чаты</div>
+                ${myChats || '<p style="color:#999;font-size:13px;">У вас пока нет чатов</p>'}
+            </div>
+            <div class="section" style="background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:20px;margin-bottom:20px;">
+                <div style="font-size:16px;font-weight:600;margin-bottom:14px;">Создать чат</div>
+                <form onsubmit="createChat(event)">
+                    <input type="text" id="chatName" class="form-input" placeholder="Название чата" required>
+                    <p style="font-size:12px;color:#777;margin:8px 0;">Выберите участников:</p>
+                    <div id="userChips" style="margin-bottom:12px;">${userChips}</div>
+                    <button type="submit" class="btn-primary">Создать чат</button>
+                </form>
+            </div>
+            <div class="section" style="background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:20px;">
+                <div style="font-size:16px;font-weight:600;margin-bottom:14px;">Личные сообщения</div>
+                ${Object.entries(users).filter(([u]) => u !== currentUser.username).map(([u,d]) => 
+                    `<a href="#" onclick="openDM('${u}')" class="chat-item">
+                        <span class="online-dot ${online.includes(u)?'online':'offline'}"></span>
+                        ${d.nickname} (@${u})
+                    </a>`
+                ).join('')}
+            </div>
+        </div>
+    `;
+}
+
+function createChat(e) {
+    e.preventDefault();
+    const name = document.getElementById('chatName').value.trim();
+    const chips = document.querySelectorAll('.user-chip.selected input');
+    const participants = Array.from(chips).map(c => c.value);
+    
+    if (!name || participants.length === 0) return;
+    if (!participants.includes(currentUser.username)) participants.push(currentUser.username);
+    
+    const chatId = 'chat_' + Date.now();
+    const chats = getChats();
+    chats[chatId] = {
+        name: name,
+        participants: participants,
+        messages: []
+    };
+    saveChats(chats);
+    openChat(chatId);
+}
+
+function openDM(username) {
+    const participants = [currentUser.username, username].sort();
+    const chatId = 'dm_' + participants.join('_');
+    const chats = getChats();
+    if (!chats[chatId]) {
+        chats[chatId] = {
+            name: currentUser.nickname + ' и ' + (getUsers()[username]?.nickname || username),
+            participants: participants,
+            messages: []
+        };
+        saveChats(chats);
+    }
+    openChat(chatId);
+}
+
+function openChat(chatId) {
+    currentChat = chatId;
+    const chats = getChats();
+    const chat = chats[chatId];
+    if (!chat) { showPage('chats'); return; }
+    
+    let msgsHTML = '';
+    (chat.messages || []).forEach(msg => {
+        const isSent = msg.username === currentUser.username;
+        msgsHTML += `
+            <div class="message-bubble ${isSent ? 'message-sent' : 'message-received'}">
+                ${!isSent ? `<div class="message-username">${msg.username}</div>` : ''}
+                ${msg.message}
+            </div>
+        `;
+    });
+    
+    document.getElementById('app').innerHTML = `
+        <div style="height:calc(100vh - 56px);display:flex;flex-direction:column;">
+            <div style="background:#fff;border-bottom:1px solid #e5e5e5;padding:12px 20px;display:flex;align-items:center;gap:16px;">
+                <a href="#" onclick="showPage('chats')" class="btn">Назад</a>
+                <span style="font-weight:600;">${chat.name}</span>
+            </div>
+            <div class="messages-area" id="chatMessages">${msgsHTML}</div>
+            <div class="message-input-area">
+                <input type="text" id="messageInput" class="message-input" placeholder="Сообщение..." onkeydown="if(event.key==='Enter')sendChatMessage()">
+                <button onclick="sendChatMessage()" class="btn-send">Отправить</button>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+    
+    if (refreshInterval) clearInterval(refreshInterval);
+    refreshInterval = setInterval(refreshChat, 1000);
+}
+
+function sendChatMessage() {
+    const input = document.getElementById('messageInput');
+    const message = input.value.trim();
+    if (!message || !currentChat) return;
+    
+    addMessage(currentChat, {
+        username: currentUser.username,
+        message: message,
+        time: new Date().toLocaleTimeString('ru-RU', {hour:'2-digit',minute:'2-digit'})
+    });
+    
+    input.value = '';
+    refreshChatDisplay();
+}
+
+function refreshChat() {
+    if (currentChat && currentPage === 'chat') {
+        refreshChatDisplay();
+    }
+}
+
+function refreshChatDisplay() {
+    const msgs = getMessages(currentChat);
+    const container = document.getElementById('chatMessages');
+    if (!container) return;
+    
+    const shouldScroll = container.scrollTop + container.clientHeight >= container.scrollHeight - 50;
+    
+    container.innerHTML = '';
+    msgs.forEach(msg => {
+        const isSent = msg.username === currentUser.username;
+        container.innerHTML += `
+            <div class="message-bubble ${isSent ? 'message-sent' : 'message-received'}">
+                ${!isSent ? `<div class="message-username">${msg.username}</div>` : ''}
+                ${msg.message}
+            </div>
+        `;
+    });
+    
+    if (shouldScroll) container.scrollTop = container.scrollHeight;
+}
+
+window.onbeforeunload = function() {
+    if (currentUser) setOffline(currentUser.username);
+};
+
+showPage('home');
+</script>
+</body>
+</html>
