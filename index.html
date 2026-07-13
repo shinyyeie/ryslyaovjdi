@@ -8,7 +8,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;color:#1a1a1a;min-height:100vh}
 .navbar{background:#fff;border-bottom:1px solid #e5e5e5;padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:1000}
-.navbar-brand{font-size:20px;font-weight:700;color:#1a1a1a;text-decoration:none;letter-spacing:-1px}
+.navbar-brand{font-size:20px;font-weight:700;color:#1a1a1a;text-decoration:none;letter-spacing:-1px;cursor:pointer}
 .navbar-menu{display:flex;gap:12px;align-items:center}
 .btn{padding:8px 18px;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;text-decoration:none;display:inline-block;border:1px solid #d4d4d4;background:#fff;color:#1a1a1a;transition:all .2s}
 .btn:hover{background:#f5f5f5;border-color:#b0b0b0}
@@ -28,14 +28,11 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;col
 .form-label{display:block;font-size:13px;font-weight:600;color:#555;margin-bottom:6px}
 .form-input{width:100%;padding:10px 14px;border:1px solid #d4d4d4;border-radius:6px;font-size:14px;background:#fff;color:#1a1a1a}
 .form-input:focus{outline:none;border-color:#1a1a1a;box-shadow:0 0 0 3px rgba(0,0,0,.05)}
-.error-message{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:16px;display:none}
-.success-message{background:#f0fdf4;border:1px solid #bbf7d0;color:#16a34a;padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:16px;display:none}
+.error-message{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:16px}
+.success-message{background:#f0fdf4;border:1px solid #bbf7d0;color:#16a34a;padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:16px}
 .online-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
-.online{background:#22c55e}
-.offline{background:#d4d4d4}
-.chat-container{display:flex;height:calc(100vh - 56px)}
-.chat-sidebar{width:300px;border-right:1px solid #e5e5e5;overflow-y:auto;background:#fafafa;padding:16px}
-.chat-main{flex:1;display:flex;flex-direction:column}
+.online-dot.online{background:#22c55e}
+.online-dot.offline{background:#d4d4d4}
 .messages-area{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:8px}
 .message-bubble{max-width:65%;padding:8px 14px;border-radius:10px;font-size:14px;line-height:1.4;word-wrap:break-word}
 .message-sent{align-self:flex-end;background:#1a1a1a;color:#fff}
@@ -49,89 +46,146 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#fff;col
 .chat-item-name{font-weight:600}
 .chat-item-username{font-size:11px;color:#999;margin-top:2px}
 .chat-item-participants{font-size:11px;color:#777;margin-top:2px}
-.user-chip{padding:6px 12px;border:1px solid #d4d4d4;border-radius:20px;font-size:12px;cursor:pointer;display:inline-block;margin:2px;transition:all .15s}
+.user-chip{padding:6px 12px;border:1px solid #d4d4d4;border-radius:20px;font-size:12px;cursor:pointer;display:inline-block;margin:3px;transition:all .15s}
 .user-chip:hover{background:#f5f5f5}
 .user-chip.selected{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.user-chip.selected .online-dot.online{background:#22c55e}
+.user-chip.selected .online-dot.offline{background:#666}
 table{width:100%;border-collapse:collapse;margin-top:16px}
 th,td{padding:10px;text-align:left;border-bottom:1px solid #e5e5e5;font-size:13px}
 th{font-weight:600;color:#555;background:#fafafa}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center}
-.modal-content{background:#fff;border-radius:12px;padding:32px;width:400px;max-width:90%}
-.modal-title{font-size:20px;font-weight:700;margin-bottom:20px}
-.search-bar{display:flex;gap:10px;margin-bottom:16px}
-.search-input{flex:1;padding:10px 14px;border:1px solid #d4d4d4;border-radius:8px;font-size:14px}
-.search-input:focus{outline:none;border-color:#1a1a1a}
 .section{background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:20px;margin-bottom:20px}
 .section-title{font-size:16px;font-weight:600;margin-bottom:14px}
 .join-btn{padding:6px 14px;background:#1a1a1a;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:500}
 .join-btn:hover{background:#333}
+.search-bar{display:flex;gap:10px;margin-bottom:16px}
+.search-input{flex:1;padding:10px 14px;border:1px solid #d4d4d4;border-radius:8px;font-size:14px}
+.search-input:focus{outline:none;border-color:#1a1a1a}
+.empty-text{color:#999;font-size:13px}
 </style>
 </head>
 <body>
 <nav class="navbar">
-<a href="#" onclick="showPage('home')" class="navbar-brand">ryslyaovjdi</a>
+<span class="navbar-brand" onclick="showPage('home')">ryslyaovjdi</span>
 <div class="navbar-menu" id="navMenu"></div>
 </nav>
 <div id="app"></div>
-<div class="modal" id="modal">
-<div class="modal-content" id="modalContent"></div>
-</div>
+
 <script>
-const ADMIN_CODE = '74522i2sO4Eq0';
-let currentUser = null;
-let currentPage = 'home';
-let currentChat = null;
-let refreshInterval = null;
+var ADMIN_CODE = '74522i2sO4Eq0';
+var currentUser = null;
+var currentPage = 'home';
+var currentChat = null;
+var refreshInterval = null;
 
-function getUsers() { return JSON.parse(localStorage.getItem('ryslyaov_users') || '{}'); }
-function saveUsers(users) { localStorage.setItem('ryslyaov_users', JSON.stringify(users)); }
-function getAnnouncements() { return JSON.parse(localStorage.getItem('ryslyaov_announcements') || '[]'); }
-function saveAnnouncements(anns) { localStorage.setItem('ryslyaov_announcements', JSON.stringify(anns)); }
-function getChats() { return JSON.parse(localStorage.getItem('ryslyaov_chats') || '{}'); }
-function saveChats(chats) { localStorage.setItem('ryslyaov_chats', JSON.stringify(chats)); }
-function getMessages(chatId) { const chats = getChats(); return chats[chatId] ? chats[chatId].messages || [] : []; }
-function addMessage(chatId, msg) { const chats = getChats(); if (!chats[chatId]) return; if (!chats[chatId].messages) chats[chatId].messages = []; chats[chatId].messages.push(msg); if (chats[chatId].messages.length > 100) chats[chatId].messages = chats[chatId].messages.slice(-100); saveChats(chats); }
-function getOnlineUsers() { return JSON.parse(localStorage.getItem('ryslyaov_online') || '[]'); }
-function setOnline(username) { let online = getOnlineUsers(); if (!online.includes(username)) online.push(username); localStorage.setItem('ryslyaov_online', JSON.stringify(online)); }
-function setOffline(username) { let online = getOnlineUsers(); online = online.filter(u => u !== username); localStorage.setItem('ryslyaov_online', JSON.stringify(online)); }
-function isOnline(username) { return getOnlineUsers().includes(username); }
+function getUsers() {
+    try { return JSON.parse(localStorage.getItem('ryslyaov_users') || '{}'); } catch(e) { return {}; }
+}
+function saveUsers(users) {
+    try { localStorage.setItem('ryslyaov_users', JSON.stringify(users)); } catch(e) {}
+}
+function getAnnouncements() {
+    try { return JSON.parse(localStorage.getItem('ryslyaov_announcements') || '[]'); } catch(e) { return []; }
+}
+function saveAnnouncements(anns) {
+    try { localStorage.setItem('ryslyaov_announcements', JSON.stringify(anns)); } catch(e) {}
+}
+function getChats() {
+    try { return JSON.parse(localStorage.getItem('ryslyaov_chats') || '{}'); } catch(e) { return {}; }
+}
+function saveChats(chats) {
+    try { localStorage.setItem('ryslyaov_chats', JSON.stringify(chats)); } catch(e) {}
+}
+function getMessages(chatId) {
+    var chats = getChats();
+    if (chats[chatId] && chats[chatId].messages) return chats[chatId].messages;
+    return [];
+}
+function addMessage(chatId, msg) {
+    var chats = getChats();
+    if (!chats[chatId]) return;
+    if (!chats[chatId].messages) chats[chatId].messages = [];
+    chats[chatId].messages.push(msg);
+    if (chats[chatId].messages.length > 100) chats[chatId].messages = chats[chatId].messages.slice(-100);
+    saveChats(chats);
+}
+function getOnlineUsers() {
+    try { return JSON.parse(localStorage.getItem('ryslyaov_online') || '[]'); } catch(e) { return []; }
+}
+function setOnline(username) {
+    var online = getOnlineUsers();
+    if (online.indexOf(username) === -1) online.push(username);
+    try { localStorage.setItem('ryslyaov_online', JSON.stringify(online)); } catch(e) {}
+}
+function setOffline(username) {
+    var online = getOnlineUsers();
+    var idx = online.indexOf(username);
+    if (idx !== -1) online.splice(idx, 1);
+    try { localStorage.setItem('ryslyaov_online', JSON.stringify(online)); } catch(e) {}
+}
+function isOnline(username) {
+    return getOnlineUsers().indexOf(username) !== -1;
+}
 
-async function sha256(str) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(str);
-    return crypto.subtle.digest('SHA-256', data).then(hash => {
-        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+function sha256(str) {
+    var encoder = new TextEncoder();
+    var data = encoder.encode(str);
+    return crypto.subtle.digest('SHA-256', data).then(function(hash) {
+        var hexes = [];
+        var bytes = new Uint8Array(hash);
+        for (var i = 0; i < bytes.length; i++) {
+            var hex = bytes[i].toString(16);
+            hexes.push(hex.length === 1 ? '0' + hex : hex);
+        }
+        return hexes.join('');
     });
 }
 
 function renderNav() {
-    const nav = document.getElementById('navMenu');
+    var nav = document.getElementById('navMenu');
+    if (!nav) return;
     if (currentUser) {
-        nav.innerHTML = '<span style="font-size:13px;color:#555;">' + currentUser.nickname + '</span><a href="#" onclick="showPage('profile')" class="btn">Профиль</a><a href="#" onclick="showPage('chats')" class="btn">Чаты</a><a href="https://t.me/ryslaovgpt" target="_blank" class="btn">Поддержка</a><a href="#" onclick="logout()" class="btn btn-danger">Выход</a>';
+        nav.innerHTML = '<span style="font-size:13px;color:#555;">' + currentUser.nickname + '</span>' +
+            '<span class="btn" onclick="showPage('profile')" style="cursor:pointer;">Профиль</span>' +
+            '<span class="btn" onclick="showPage('chats')" style="cursor:pointer;">Чаты</span>' +
+            '<a href="https://t.me/ryslaovgpt" target="_blank" class="btn" style="text-decoration:none;">Поддержка</a>' +
+            '<span class="btn btn-danger" onclick="logout()" style="cursor:pointer;">Выход</span>';
     } else {
-        nav.innerHTML = '<a href="#" onclick="showPage('login')" class="btn">Вход</a><a href="#" onclick="showPage('register')" class="btn btn-primary">Регистрация</a><a href="https://t.me/ryslaovgpt" target="_blank" class="btn">Поддержка</a>';
+        nav.innerHTML = '<span class="btn" onclick="showPage('login')" style="cursor:pointer;">Вход</span>' +
+            '<span class="btn btn-primary" onclick="showPage('register')" style="cursor:pointer;">Регистрация</span>' +
+            '<a href="https://t.me/ryslaovgpt" target="_blank" class="btn" style="text-decoration:none;">Поддержка</a>';
     }
 }
 
 function showPage(page) {
     currentPage = page;
-    if (page !== 'chat') { currentChat = null; if (refreshInterval) { clearInterval(refreshInterval); refreshInterval = null; } }
-    renderNav();
-    switch(page) {
-        case 'home': renderHome(); break;
-        case 'login': renderLogin(); break;
-        case 'register': renderRegister(); break;
-        case 'profile': renderProfile(); break;
-        case 'chats': renderChats(); break;
-        case 'admin': renderAdmin(); break;
+    if (page !== 'chat') {
+        currentChat = null;
+        if (refreshInterval) {
+            clearInterval(refreshInterval);
+            refreshInterval = null;
+        }
     }
+    renderNav();
+    var app = document.getElementById('app');
+    if (!app) return;
+    
+    if (page === 'home') renderHome();
+    else if (page === 'login') renderLogin();
+    else if (page === 'register') renderRegister();
+    else if (page === 'profile') renderProfile();
+    else if (page === 'chats') renderChats();
+    else if (page === 'admin') renderAdmin();
 }
 
 function renderHome() {
-    const anns = getAnnouncements();
-    let annHTML = '';
+    var anns = getAnnouncements();
+    var annHTML = '';
     if (anns.length > 0) {
-        anns.slice(-10).reverse().forEach(a => { annHTML += '<div class="announcement-item"><span>' + a.text + '</span><span class="announcement-time">' + a.time + ' | ' + a.author + '</span></div>'; });
+        var reversed = anns.slice(-10).reverse();
+        for (var i = 0; i < reversed.length; i++) {
+            annHTML += '<div class="announcement-item"><span>' + reversed[i].text + '</span><span class="announcement-time">' + reversed[i].time + ' | ' + reversed[i].author + '</span></div>';
+        }
     } else {
         annHTML = '<div class="announcement-item">Нет объявлений</div>';
     }
@@ -139,91 +193,150 @@ function renderHome() {
 }
 
 function renderLogin() {
-    document.getElementById('app').innerHTML = '<div class="form-container"><div class="form-title">Вход</div><div class="form-subtitle">Войдите в аккаунт ryslyaovjdi</div><div class="error-message" id="loginError"></div><form onsubmit="login(event)"><div class="form-group"><label class="form-label">Логин</label><input type="text" id="loginUsername" class="form-input" required></div><div class="form-group"><label class="form-label">Пароль</label><input type="password" id="loginPassword" class="form-input" required></div><button type="submit" class="btn-primary" style="width:100%;padding:12px;border-radius:6px;">Войти</button></form><p style="text-align:center;margin-top:20px;font-size:13px;color:#777;">Нет аккаунта? <a href="#" onclick="showPage('register')" style="color:#1a1a1a;font-weight:600;">Зарегистрироваться</a></p><p style="text-align:center;margin-top:12px;font-size:13px;"><a href="#" onclick="showPage('home')" style="color:#999;">На главную</a></p></div>';
+    document.getElementById('app').innerHTML = '<div class="form-container"><div class="form-title">Вход</div><div class="form-subtitle">Войдите в аккаунт ryslyaovjdi</div><div class="error-message" id="loginError" style="display:none;"></div><form onsubmit="return login(event)"><div class="form-group"><label class="form-label">Логин</label><input type="text" id="loginUsername" class="form-input" required></div><div class="form-group"><label class="form-label">Пароль</label><input type="password" id="loginPassword" class="form-input" required></div><button type="submit" class="btn-primary" style="width:100%;padding:12px;border-radius:6px;cursor:pointer;">Войти</button></form><p style="text-align:center;margin-top:20px;font-size:13px;color:#777;">Нет аккаунта? <span onclick="showPage('register')" style="color:#1a1a1a;font-weight:600;cursor:pointer;">Зарегистрироваться</span></p><p style="text-align:center;margin-top:12px;font-size:13px;"><span onclick="showPage('home')" style="color:#999;cursor:pointer;">На главную</span></p></div>';
 }
 
-async function login(e) {
+function login(e) {
     e.preventDefault();
-    const username = document.getElementById('loginUsername').value.trim();
-    const password = document.getElementById('loginPassword').value;
-    const users = getUsers();
-    const errorEl = document.getElementById('loginError');
-    if (!users[username]) { errorEl.textContent = 'Пользователь не найден'; errorEl.style.display = 'block'; return; }
-    const hash = await sha256(password);
-    if (users[username].password !== hash) { errorEl.textContent = 'Неверный пароль'; errorEl.style.display = 'block'; return; }
-    currentUser = { username, ...users[username] };
-    setOnline(username);
-    showPage('home');
+    var username = document.getElementById('loginUsername').value.trim();
+    var password = document.getElementById('loginPassword').value;
+    var users = getUsers();
+    var errorEl = document.getElementById('loginError');
+    if (!users[username]) {
+        errorEl.textContent = 'Пользователь не найден';
+        errorEl.style.display = 'block';
+        return false;
+    }
+    sha256(password).then(function(hash) {
+        if (users[username].password !== hash) {
+            errorEl.textContent = 'Неверный пароль';
+            errorEl.style.display = 'block';
+            return;
+        }
+        currentUser = {username: username, nickname: users[username].nickname, description: users[username].description || '', isAdmin: users[username].isAdmin || false};
+        setOnline(username);
+        showPage('home');
+    });
+    return false;
 }
 
 function renderRegister() {
-    document.getElementById('app').innerHTML = '<div class="form-container"><div class="form-title">Регистрация</div><div class="form-subtitle">Создайте аккаунт ryslyaovjdi</div><div class="error-message" id="regError"></div><form onsubmit="register(event)"><div class="form-group"><label class="form-label">Логин</label><input type="text" id="regUsername" class="form-input" required></div><div class="form-group"><label class="form-label">Пароль (минимум 6 символов)</label><input type="password" id="regPassword" class="form-input" required></div><div class="form-group"><label class="form-label">Подтвердите пароль</label><input type="password" id="regConfirm" class="form-input" required></div><button type="submit" class="btn-primary" style="width:100%;padding:12px;border-radius:6px;">Зарегистрироваться</button></form><p style="text-align:center;margin-top:20px;font-size:13px;color:#777;">Уже есть аккаунт? <a href="#" onclick="showPage('login')" style="color:#1a1a1a;font-weight:600;">Войти</a></p><p style="text-align:center;margin-top:12px;font-size:13px;"><a href="#" onclick="showPage('home')" style="color:#999;">На главную</a></p></div>';
+    document.getElementById('app').innerHTML = '<div class="form-container"><div class="form-title">Регистрация</div><div class="form-subtitle">Создайте аккаунт ryslyaovjdi</div><div class="error-message" id="regError" style="display:none;"></div><form onsubmit="return register(event)"><div class="form-group"><label class="form-label">Логин</label><input type="text" id="regUsername" class="form-input" required></div><div class="form-group"><label class="form-label">Пароль (минимум 6 символов)</label><input type="password" id="regPassword" class="form-input" required></div><div class="form-group"><label class="form-label">Подтвердите пароль</label><input type="password" id="regConfirm" class="form-input" required></div><button type="submit" class="btn-primary" style="width:100%;padding:12px;border-radius:6px;cursor:pointer;">Зарегистрироваться</button></form><p style="text-align:center;margin-top:20px;font-size:13px;color:#777;">Уже есть аккаунт? <span onclick="showPage('login')" style="color:#1a1a1a;font-weight:600;cursor:pointer;">Войти</span></p><p style="text-align:center;margin-top:12px;font-size:13px;"><span onclick="showPage('home')" style="color:#999;cursor:pointer;">На главную</span></p></div>';
 }
 
-async function register(e) {
+function register(e) {
     e.preventDefault();
-    const username = document.getElementById('regUsername').value.trim();
-    const password = document.getElementById('regPassword').value;
-    const confirm = document.getElementById('regConfirm').value;
-    const errorEl = document.getElementById('regError');
-    if (!username || !password || !confirm) { errorEl.textContent = 'Все поля обязательны'; errorEl.style.display = 'block'; return; }
-    if (password !== confirm) { errorEl.textContent = 'Пароли не совпадают'; errorEl.style.display = 'block'; return; }
-    if (password.length < 6) { errorEl.textContent = 'Пароль должен быть не менее 6 символов'; errorEl.style.display = 'block'; return; }
-    const users = getUsers();
-    if (users[username]) { errorEl.textContent = 'Пользователь уже существует'; errorEl.style.display = 'block'; return; }
-    const hash = await sha256(password);
-    users[username] = { password: hash, nickname: username, description: '', isAdmin: false };
-    saveUsers(users);
-    showPage('login');
+    var username = document.getElementById('regUsername').value.trim();
+    var password = document.getElementById('regPassword').value;
+    var confirm = document.getElementById('regConfirm').value;
+    var errorEl = document.getElementById('regError');
+    if (!username || !password || !confirm) {
+        errorEl.textContent = 'Все поля обязательны';
+        errorEl.style.display = 'block';
+        return false;
+    }
+    if (password !== confirm) {
+        errorEl.textContent = 'Пароли не совпадают';
+        errorEl.style.display = 'block';
+        return false;
+    }
+    if (password.length < 6) {
+        errorEl.textContent = 'Пароль должен быть не менее 6 символов';
+        errorEl.style.display = 'block';
+        return false;
+    }
+    var users = getUsers();
+    if (users[username]) {
+        errorEl.textContent = 'Пользователь уже существует';
+        errorEl.style.display = 'block';
+        return false;
+    }
+    sha256(password).then(function(hash) {
+        users[username] = {password: hash, nickname: username, description: '', isAdmin: false};
+        saveUsers(users);
+        showPage('login');
+    });
+    return false;
 }
 
 function logout() {
-    if (currentUser) { setOffline(currentUser.username); }
+    if (currentUser) setOffline(currentUser.username);
     currentUser = null;
     showPage('home');
 }
 
 function renderProfile() {
     if (!currentUser) { showPage('login'); return; }
-    const users = getUsers();
-    const user = users[currentUser.username];
-    document.getElementById('app').innerHTML = '<div class="form-container" style="max-width:500px;"><div class="form-title">Профиль</div><div class="error-message" id="profError"></div><div class="success-message" id="profSuccess"></div><form onsubmit="updateProfile(event)"><div class="form-group"><label class="form-label">Никнейм</label><input type="text" id="profNickname" class="form-input" value="' + user.nickname + '"></div><div class="form-group"><label class="form-label">Описание</label><input type="text" id="profDesc" class="form-input" value="' + (user.description || '') + '"></div><div class="form-group"><label class="form-label">Текущий пароль (для смены пароля)</label><input type="password" id="profOldPass" class="form-input"></div><div class="form-group"><label class="form-label">Новый пароль</label><input type="password" id="profNewPass" class="form-input"></div><div class="form-group"><label class="form-label">Подтвердите новый пароль</label><input type="password" id="profNewConfirm" class="form-input"></div><button type="submit" class="btn-primary" style="width:100%;padding:12px;border-radius:6px;">Сохранить изменения</button></form><p style="text-align:center;margin-top:20px;font-size:13px;"><a href="#" onclick="showPage('admin')" style="color:#999;">Админ-панель</a></p></div>';
+    var users = getUsers();
+    var user = users[currentUser.username];
+    document.getElementById('app').innerHTML = '<div class="form-container" style="max-width:500px;"><div class="form-title">Профиль</div><div class="error-message" id="profError" style="display:none;"></div><div class="success-message" id="profSuccess" style="display:none;"></div><form onsubmit="return updateProfile(event)"><div class="form-group"><label class="form-label">Никнейм</label><input type="text" id="profNickname" class="form-input" value="' + user.nickname + '"></div><div class="form-group"><label class="form-label">Описание</label><input type="text" id="profDesc" class="form-input" value="' + (user.description || '') + '"></div><div class="form-group"><label class="form-label">Текущий пароль (для смены пароля)</label><input type="password" id="profOldPass" class="form-input"></div><div class="form-group"><label class="form-label">Новый пароль</label><input type="password" id="profNewPass" class="form-input"></div><div class="form-group"><label class="form-label">Подтвердите новый пароль</label><input type="password" id="profNewConfirm" class="form-input"></div><button type="submit" class="btn-primary" style="width:100%;padding:12px;border-radius:6px;cursor:pointer;">Сохранить изменения</button></form><p style="text-align:center;margin-top:20px;font-size:13px;"><span onclick="showPage('admin')" style="color:#999;cursor:pointer;">Админ-панель</span></p></div>';
 }
 
-async function updateProfile(e) {
+function updateProfile(e) {
     e.preventDefault();
-    const users = getUsers();
-    const user = users[currentUser.username];
-    const newNick = document.getElementById('profNickname').value.trim();
-    const newDesc = document.getElementById('profDesc').value.trim();
-    const oldPass = document.getElementById('profOldPass').value;
-    const newPass = document.getElementById('profNewPass').value;
-    const newConfirm = document.getElementById('profNewConfirm').value;
-    const errEl = document.getElementById('profError');
-    const sucEl = document.getElementById('profSuccess');
+    var users = getUsers();
+    var user = users[currentUser.username];
+    var newNick = document.getElementById('profNickname').value.trim();
+    var newDesc = document.getElementById('profDesc').value.trim();
+    var oldPass = document.getElementById('profOldPass').value;
+    var newPass = document.getElementById('profNewPass').value;
+    var newConfirm = document.getElementById('profNewConfirm').value;
+    var errEl = document.getElementById('profError');
+    var sucEl = document.getElementById('profSuccess');
+    
     if (newNick) user.nickname = newNick;
     user.description = newDesc;
+    
     if (oldPass && newPass) {
-        const oldHash = await sha256(oldPass);
-        if (user.password !== oldHash) { errEl.textContent = 'Неверный текущий пароль'; errEl.style.display = 'block'; return; }
-        if (newPass !== newConfirm) { errEl.textContent = 'Новые пароли не совпадают'; errEl.style.display = 'block'; return; }
-        if (newPass.length < 6) { errEl.textContent = 'Новый пароль должен быть не менее 6 символов'; errEl.style.display = 'block'; return; }
-        user.password = await sha256(newPass);
+        sha256(oldPass).then(function(oldHash) {
+            if (user.password !== oldHash) {
+                errEl.textContent = 'Неверный текущий пароль';
+                errEl.style.display = 'block';
+                sucEl.style.display = 'none';
+                return;
+            }
+            if (newPass !== newConfirm) {
+                errEl.textContent = 'Новые пароли не совпадают';
+                errEl.style.display = 'block';
+                sucEl.style.display = 'none';
+                return;
+            }
+            if (newPass.length < 6) {
+                errEl.textContent = 'Новый пароль должен быть не менее 6 символов';
+                errEl.style.display = 'block';
+                sucEl.style.display = 'none';
+                return;
+            }
+            sha256(newPass).then(function(newHash) {
+                user.password = newHash;
+                users[currentUser.username] = user;
+                saveUsers(users);
+                currentUser.nickname = user.nickname;
+                currentUser.description = user.description;
+                sucEl.textContent = 'Профиль обновлен';
+                sucEl.style.display = 'block';
+                errEl.style.display = 'none';
+                setTimeout(function() { sucEl.style.display = 'none'; }, 2000);
+            });
+        });
+    } else {
+        users[currentUser.username] = user;
+        saveUsers(users);
+        currentUser.nickname = user.nickname;
+        currentUser.description = user.description;
+        sucEl.textContent = 'Профиль обновлен';
+        sucEl.style.display = 'block';
+        errEl.style.display = 'none';
+        setTimeout(function() { sucEl.style.display = 'none'; }, 2000);
     }
-    users[currentUser.username] = user;
-    saveUsers(users);
-    currentUser = { username: currentUser.username, ...user };
-    sucEl.textContent = 'Профиль обновлен';
-    sucEl.style.display = 'block';
-    errEl.style.display = 'none';
-    setTimeout(function() { sucEl.style.display = 'none'; }, 2000);
+    return false;
 }
 
 function renderAdmin() {
     if (!currentUser) { showPage('login'); return; }
-    const users = getUsers();
+    var users = getUsers();
     if (!users[currentUser.username].isAdmin) {
-        document.getElementById('app').innerHTML = '<div class="form-container"><div class="form-title">Доступ к админ-панели</div><div class="error-message" id="adminError"></div><form onsubmit="checkAdminCode(event)"><input type="password" id="adminCodeInput" class="form-input" placeholder="Введите код доступа" required><button type="submit" class="btn-primary" style="width:100%;padding:12px;border-radius:6px;margin-top:16px;">Подтвердить</button></form><p style="text-align:center;margin-top:12px;"><a href="#" onclick="showPage('profile')" style="color:#999;">Назад в профиль</a></p></div>';
+        document.getElementById('app').innerHTML = '<div class="form-container"><div class="form-title">Доступ к админ-панели</div><div class="error-message" id="adminError" style="display:none;"></div><form onsubmit="return checkAdminCode(event)"><input type="password" id="adminCodeInput" class="form-input" placeholder="Введите код доступа" required><button type="submit" class="btn-primary" style="width:100%;padding:12px;border-radius:6px;margin-top:16px;cursor:pointer;">Подтвердить</button></form><p style="text-align:center;margin-top:12px;"><span onclick="showPage('profile')" style="color:#999;cursor:pointer;">Назад в профиль</span></p></div>';
     } else {
         renderAdminPanel();
     }
@@ -231,141 +344,163 @@ function renderAdmin() {
 
 function checkAdminCode(e) {
     e.preventDefault();
-    const code = document.getElementById('adminCodeInput').value;
+    var code = document.getElementById('adminCodeInput').value;
     if (code === ADMIN_CODE) {
-        const users = getUsers();
+        var users = getUsers();
         users[currentUser.username].isAdmin = true;
         saveUsers(users);
         currentUser.isAdmin = true;
         renderAdminPanel();
     } else {
-        document.getElementById('adminError').textContent = 'Неверный код доступа';
-        document.getElementById('adminError').style.display = 'block';
+        var errEl = document.getElementById('adminError');
+        if (errEl) {
+            errEl.textContent = 'Неверный код доступа';
+            errEl.style.display = 'block';
+        }
     }
+    return false;
 }
 
 function renderAdminPanel() {
-    const users = getUsers();
-    const anns = getAnnouncements();
-    const online = getOnlineUsers();
-    let userRows = '';
-    for (let username in users) {
-        const data = users[username];
-        userRows += '<tr><td>' + username + '</td><td style="font-size:10px;">' + data.password.substring(0,20) + '...</td><td>' + data.nickname + '</td><td><span class="online-dot ' + (online.includes(username)?'online':'offline') + '"></span>' + (online.includes(username)?'Онлайн':'Офлайн') + '</td><td>' + (data.isAdmin?'Да':'Нет') + '</td></tr>';
+    var users = getUsers();
+    var anns = getAnnouncements();
+    var online = getOnlineUsers();
+    var userRows = '';
+    var usernames = Object.keys(users);
+    for (var i = 0; i < usernames.length; i++) {
+        var username = usernames[i];
+        var data = users[username];
+        var isOn = online.indexOf(username) !== -1;
+        userRows += '<tr><td>' + username + '</td><td style="font-size:10px;">' + data.password.substring(0,20) + '...</td><td>' + data.nickname + '</td><td><span class="online-dot ' + (isOn?'online':'offline') + '"></span>' + (isOn?'Онлайн':'Офлайн') + '</td><td>' + (data.isAdmin?'Да':'Нет') + '</td></tr>';
     }
-    let annHTML = '';
-    anns.slice(-20).reverse().forEach(function(a) { annHTML += '<div class="announcement-item"><span>' + a.text + '</span><span class="announcement-time">' + a.time + ' | ' + a.author + '</span></div>'; });
-    document.getElementById('app').innerHTML = '<div class="container"><div class="section"><div class="section-title">Отправить объявление на главное табло</div><form onsubmit="addAnnouncement(event)" style="display:flex;gap:10px;"><input type="text" id="announcementText" class="form-input" style="flex:1;" placeholder="Текст объявления" required><button type="submit" class="btn-primary">Отправить</button></form></div><div class="section"><div class="section-title">Объявления</div>' + (annHTML || '<p style="color:#999;font-size:13px;">Нет объявлений</p>') + '</div><div class="section"><div class="section-title">База данных пользователей</div><div style="overflow-x:auto;"><table><tr><th>Логин</th><th>Пароль (SHA-256)</th><th>Никнейм</th><th>Онлайн</th><th>Админ</th></tr>' + userRows + '</table></div></div></div>';
+    var annHTML = '';
+    var reversedAnns = anns.slice(-20).reverse();
+    for (var j = 0; j < reversedAnns.length; j++) {
+        annHTML += '<div class="announcement-item"><span>' + reversedAnns[j].text + '</span><span class="announcement-time">' + reversedAnns[j].time + ' | ' + reversedAnns[j].author + '</span></div>';
+    }
+    if (!annHTML) annHTML = '<p class="empty-text">Нет объявлений</p>';
+    
+    document.getElementById('app').innerHTML = '<div class="container"><div class="section"><div class="section-title">Отправить объявление на главное табло</div><form onsubmit="return addAnnouncement(event)" style="display:flex;gap:10px;"><input type="text" id="announcementText" class="form-input" style="flex:1;" placeholder="Текст объявления" required><button type="submit" class="btn-primary">Отправить</button></form></div><div class="section"><div class="section-title">Объявления</div>' + annHTML + '</div><div class="section"><div class="section-title">База данных пользователей</div><div style="overflow-x:auto;"><table><tr><th>Логин</th><th>Пароль (SHA-256)</th><th>Никнейм</th><th>Онлайн</th><th>Админ</th></tr>' + userRows + '</table></div></div></div>';
 }
 
 function addAnnouncement(e) {
     e.preventDefault();
-    const text = document.getElementById('announcementText').value.trim();
-    if (!text) return;
-    const anns = getAnnouncements();
-    anns.push({ text: text, author: currentUser.nickname, time: new Date().toLocaleString('ru-RU') });
+    var text = document.getElementById('announcementText').value.trim();
+    if (!text) return false;
+    var anns = getAnnouncements();
+    var now = new Date();
+    var timeStr = ('0' + now.getDate()).slice(-2) + '.' + ('0' + (now.getMonth()+1)).slice(-2) + '.' + now.getFullYear() + ' ' + ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
+    anns.push({text: text, author: currentUser.nickname, time: timeStr});
     saveAnnouncements(anns);
     renderAdminPanel();
+    return false;
 }
 
 function renderChats() {
     if (!currentUser) { showPage('login'); return; }
-    const chats = getChats();
-    const users = getUsers();
-    const online = getOnlineUsers();
+    var chats = getChats();
+    var users = getUsers();
+    var online = getOnlineUsers();
+    var myChats = '';
+    var discoverChats = '';
+    var chatIds = Object.keys(chats);
     
-    let myChats = '';
-    let discoverChats = '';
-    
-    for (let chatId in chats) {
-        const chat = chats[chatId];
+    for (var i = 0; i < chatIds.length; i++) {
+        var chatId = chatIds[i];
+        var chat = chats[chatId];
         if (!chat.participants) continue;
-        
-        if (chat.participants.includes(currentUser.username)) {
-            myChats += '<div class="chat-item" onclick="openChat('' + chatId + '')"><div><div class="chat-item-name">' + (chat.name || 'Чат') + '</div><div class="chat-item-username">@' + (chat.username || chatId) + '</div><div class="chat-item-participants">' + chat.participants.length + ' участников</div></div><span style="color:#22c55e;font-size:12px;">Участник</span></div>';
+        var partCount = chat.participants.length;
+        if (chat.participants.indexOf(currentUser.username) !== -1) {
+            myChats += '<div class="chat-item" onclick="openChat('' + chatId + '')" style="cursor:pointer;"><div><div class="chat-item-name">' + (chat.name || 'Чат') + '</div><div class="chat-item-username">@' + (chat.username || chatId) + '</div><div class="chat-item-participants">' + partCount + ' участников</div></div><span style="color:#22c55e;font-size:12px;">Участник</span></div>';
         } else if (!chat.isDM) {
-            discoverChats += '<div class="chat-item"><div><div class="chat-item-name">' + (chat.name || 'Чат') + '</div><div class="chat-item-username">@' + (chat.username || chatId) + '</div><div class="chat-item-participants">' + chat.participants.length + ' участников</div></div><button class="join-btn" onclick="joinChat('' + chatId + '')">Вступить</button></div>';
+            discoverChats += '<div class="chat-item"><div><div class="chat-item-name">' + (chat.name || 'Чат') + '</div><div class="chat-item-username">@' + (chat.username || chatId) + '</div><div class="chat-item-participants">' + partCount + ' участников</div></div><button class="join-btn" onclick="joinChat('' + chatId + '')">Вступить</button></div>';
         }
     }
     
-    let userChips = '';
-    for (let username in users) {
-        if (username !== currentUser.username) {
-            userChips += '<label class="user-chip" onclick="this.classList.toggle('selected')"><span class="online-dot ' + (online.includes(username)?'online':'offline') + '"></span>' + users[username].nickname + '<input type="checkbox" name="chatParticipants" value="' + username + '" style="display:none;"></label>';
+    var userChips = '';
+    var userKeys = Object.keys(users);
+    for (var j = 0; j < userKeys.length; j++) {
+        var u = userKeys[j];
+        if (u !== currentUser.username) {
+            userChips += '<label class="user-chip" onclick="this.classList.toggle('selected')"><span class="online-dot ' + (online.indexOf(u) !== -1 ? 'online' : 'offline') + '"></span>' + users[u].nickname + '<input type="checkbox" name="chatParticipants" value="' + u + '" style="display:none;"></label>';
+        }
+    }
+    
+    var dmHTML = '';
+    for (var k = 0; k < userKeys.length; k++) {
+        var uk = userKeys[k];
+        if (uk !== currentUser.username) {
+            dmHTML += '<div class="chat-item" onclick="openDM('' + uk + '')" style="cursor:pointer;"><div><div class="chat-item-name">' + users[uk].nickname + '</div><div class="chat-item-username">@' + uk + '</div></div><span class="online-dot ' + (online.indexOf(uk) !== -1 ? 'online' : 'offline') + '"></span></div>';
         }
     }
     
     document.getElementById('app').innerHTML = '<div class="container">' +
-        '<div class="section"><div class="section-title">Ваши чаты</div>' + (myChats || '<p style="color:#999;font-size:13px;">У вас пока нет чатов</p>') + '</div>' +
-        '<div class="section"><div class="section-title">Создать чат</div><form onsubmit="createChat(event)"><div class="form-group"><label class="form-label">Название чата</label><input type="text" id="chatName" class="form-input" placeholder="Мой чат" required></div><div class="form-group"><label class="form-label">Юзернейм чата (для поиска)</label><input type="text" id="chatUsername" class="form-input" placeholder="mychat123" required><p style="font-size:11px;color:#999;margin-top:4px;">Только буквы, цифры и подчеркивание</p></div><p style="font-size:12px;color:#777;margin:8px 0;">Выберите участников:</p><div id="userChips" style="margin-bottom:12px;">' + userChips + '</div><button type="submit" class="btn-primary">Создать чат</button></form></div>' +
+        '<div class="section"><div class="section-title">Ваши чаты</div>' + (myChats || '<p class="empty-text">У вас пока нет чатов</p>') + '</div>' +
+        '<div class="section"><div class="section-title">Создать чат</div><form onsubmit="return createChat(event)"><div class="form-group"><label class="form-label">Название чата</label><input type="text" id="chatName" class="form-input" placeholder="Мой чат" required></div><div class="form-group"><label class="form-label">Юзернейм чата (для поиска)</label><input type="text" id="chatUsername" class="form-input" placeholder="mychat123" required><p style="font-size:11px;color:#999;margin-top:4px;">Только буквы, цифры и подчеркивание</p></div><p style="font-size:12px;color:#777;margin:8px 0;">Выберите участников:</p><div style="margin-bottom:12px;">' + userChips + '</div><button type="submit" class="btn-primary">Создать чат</button></form></div>' +
         '<div class="section"><div class="section-title">Поиск чатов по юзернейму</div><div class="search-bar"><input type="text" id="searchInput" class="search-input" placeholder="Введите юзернейм чата..." onkeydown="if(event.key==='Enter')searchChats()"><button class="btn-primary" onclick="searchChats()">Поиск</button></div><div id="searchResults"></div></div>' +
-        '<div class="section"><div class="section-title">Доступные чаты</div>' + (discoverChats || '<p style="color:#999;font-size:13px;">Нет доступных чатов</p>') + '</div>' +
-        '<div class="section"><div class="section-title">Личные сообщения</div>' + Object.keys(users).filter(function(u) { return u !== currentUser.username; }).map(function(u) { return '<a href="#" onclick="openDM('' + u + '')" class="chat-item"><div><div class="chat-item-name">' + users[u].nickname + '</div><div class="chat-item-username">@' + u + '</div></div><span class="online-dot ' + (online.includes(u)?'online':'offline') + '"></span></a>'; }).join('') + '</div>' +
+        '<div class="section"><div class="section-title">Доступные чаты</div>' + (discoverChats || '<p class="empty-text">Нет доступных чатов</p>') + '</div>' +
+        '<div class="section"><div class="section-title">Личные сообщения</div>' + (dmHTML || '<p class="empty-text">Нет пользователей</p>') + '</div>' +
         '</div>';
 }
 
 function searchChats() {
-    const query = document.getElementById('searchInput').value.trim().toLowerCase();
-    const chats = getChats();
-    const resultsDiv = document.getElementById('searchResults');
-    
+    var query = document.getElementById('searchInput').value.trim().toLowerCase();
+    var resultsDiv = document.getElementById('searchResults');
     if (!query) {
-        resultsDiv.innerHTML = '<p style="color:#999;font-size:13px;">Введите юзернейм для поиска</p>';
+        resultsDiv.innerHTML = '<p class="empty-text">Введите юзернейм для поиска</p>';
         return;
     }
-    
-    let found = [];
-    for (let chatId in chats) {
-        const chat = chats[chatId];
-        if (chat.username && chat.username.toLowerCase().includes(query) && !chat.isDM && chat.participants && !chat.participants.includes(currentUser.username)) {
-            found.push({ id: chatId, chat: chat });
+    var chats = getChats();
+    var found = [];
+    var chatIds = Object.keys(chats);
+    for (var i = 0; i < chatIds.length; i++) {
+        var chat = chats[chatIds[i]];
+        if (chat.username && chat.username.toLowerCase().indexOf(query) !== -1 && !chat.isDM && chat.participants && chat.participants.indexOf(currentUser.username) === -1) {
+            found.push({id: chatIds[i], chat: chat});
         }
     }
-    
     if (found.length === 0) {
-        resultsDiv.innerHTML = '<p style="color:#999;font-size:13px;">Чаты не найдены</p>';
+        resultsDiv.innerHTML = '<p class="empty-text">Чаты не найдены</p>';
     } else {
-        resultsDiv.innerHTML = found.map(function(f) {
-            return '<div class="chat-item"><div><div class="chat-item-name">' + f.chat.name + '</div><div class="chat-item-username">@' + f.chat.username + '</div><div class="chat-item-participants">' + f.chat.participants.length + ' участников</div></div><button class="join-btn" onclick="joinChat('' + f.id + '')">Вступить</button></div>';
-        }).join('');
+        var html = '';
+        for (var j = 0; j < found.length; j++) {
+            html += '<div class="chat-item"><div><div class="chat-item-name">' + found[j].chat.name + '</div><div class="chat-item-username">@' + found[j].chat.username + '</div><div class="chat-item-participants">' + found[j].chat.participants.length + ' участников</div></div><button class="join-btn" onclick="joinChat('' + found[j].id + '')">Вступить</button></div>';
+        }
+        resultsDiv.innerHTML = html;
     }
 }
 
 function createChat(e) {
     e.preventDefault();
-    const name = document.getElementById('chatName').value.trim();
-    const username = document.getElementById('chatUsername').value.trim().toLowerCase();
-    const chips = document.querySelectorAll('.user-chip.selected input');
-    const participants = Array.from(chips).map(function(c) { return c.value; });
-    
-    if (!name || !username) { alert('Введите название и юзернейм чата'); return; }
-    if (!/^[a-z0-9_]+$/.test(username)) { alert('Юзернейм может содержать только буквы, цифры и подчеркивание'); return; }
-    if (!participants.includes(currentUser.username)) participants.push(currentUser.username);
-    
-    const chats = getChats();
-    for (let chatId in chats) {
-        if (chats[chatId].username === username) {
+    var name = document.getElementById('chatName').value.trim();
+    var username = document.getElementById('chatUsername').value.trim().toLowerCase();
+    var chips = document.querySelectorAll('.user-chip.selected input');
+    var participants = [];
+    for (var i = 0; i < chips.length; i++) {
+        participants.push(chips[i].value);
+    }
+    if (!name || !username) { alert('Введите название и юзернейм чата'); return false; }
+    if (!/^[a-z0-9_]+$/.test(username)) { alert('Юзернейм может содержать только буквы, цифры и подчеркивание'); return false; }
+    if (participants.indexOf(currentUser.username) === -1) participants.push(currentUser.username);
+    var chats = getChats();
+    var chatIds = Object.keys(chats);
+    for (var j = 0; j < chatIds.length; j++) {
+        if (chats[chatIds[j]].username === username) {
             alert('Чат с таким юзернеймом уже существует');
-            return;
+            return false;
         }
     }
-    
-    const chatId = 'chat_' + Date.now();
-    chats[chatId] = {
-        name: name,
-        username: username,
-        participants: participants,
-        messages: [],
-        isDM: false
-    };
+    var chatId = 'chat_' + Date.now();
+    chats[chatId] = {name: name, username: username, participants: participants, messages: [], isDM: false};
     saveChats(chats);
     openChat(chatId);
+    return false;
 }
 
 function joinChat(chatId) {
-    const chats = getChats();
+    var chats = getChats();
     if (!chats[chatId]) return;
-    if (!chats[chatId].participants.includes(currentUser.username)) {
+    if (chats[chatId].participants.indexOf(currentUser.username) === -1) {
         chats[chatId].participants.push(currentUser.username);
         saveChats(chats);
     }
@@ -373,14 +508,15 @@ function joinChat(chatId) {
 }
 
 function openDM(username) {
-    const participants = [currentUser.username, username].sort();
-    const chatId = 'dm_' + participants.join('_');
-    const chats = getChats();
+    var parts = [currentUser.username, username].sort();
+    var chatId = 'dm_' + parts.join('_');
+    var chats = getChats();
     if (!chats[chatId]) {
+        var users = getUsers();
         chats[chatId] = {
-            name: currentUser.nickname + ' и ' + (getUsers()[username] ? getUsers()[username].nickname : username),
+            name: currentUser.nickname + ' и ' + (users[username] ? users[username].nickname : username),
             username: null,
-            participants: participants,
+            participants: [currentUser.username, username],
             messages: [],
             isDM: true
         };
@@ -393,38 +529,29 @@ function openChat(chatId) {
     currentPage = 'chat';
     currentChat = chatId;
     renderNav();
-    
-    const chats = getChats();
-    const chat = chats[chatId];
+    var chats = getChats();
+    var chat = chats[chatId];
     if (!chat) { showPage('chats'); return; }
-    
-    let msgsHTML = '';
-    (chat.messages || []).forEach(function(msg) {
-        const isSent = msg.username === currentUser.username;
-        msgsHTML += '<div class="message-bubble ' + (isSent ? 'message-sent' : 'message-received') + '">' + (!isSent ? '<div class="message-username">' + msg.username + '</div>' : '') + msg.message + '</div>';
-    });
-    
-    document.getElementById('app').innerHTML = '<div style="height:calc(100vh - 56px);display:flex;flex-direction:column;"><div style="background:#fff;border-bottom:1px solid #e5e5e5;padding:12px 20px;display:flex;align-items:center;gap:16px;"><a href="#" onclick="showPage('chats')" class="btn">Назад</a><div><span style="font-weight:600;">' + chat.name + '</span>' + (chat.username ? '<span style="font-size:11px;color:#999;margin-left:8px;">@' + chat.username + '</span>' : '') + '</div><span style="font-size:11px;color:#777;margin-left:auto;">' + chat.participants.length + ' участников</span></div><div class="messages-area" id="chatMessages">' + msgsHTML + '</div><div class="message-input-area"><input type="text" id="messageInput" class="message-input" placeholder="Сообщение..." onkeydown="if(event.key==='Enter')sendChatMessage()"><button onclick="sendChatMessage()" class="btn-send">Отправить</button></div></div>';
+    var msgs = chat.messages || [];
+    var msgsHTML = '';
+    for (var i = 0; i < msgs.length; i++) {
+        var isSent = msgs[i].username === currentUser.username;
+        msgsHTML += '<div class="message-bubble ' + (isSent ? 'message-sent' : 'message-received') + '">' + (isSent ? '' : '<div class="message-username">' + msgs[i].username + '</div>') + msgs[i].message + '</div>';
+    }
+    document.getElementById('app').innerHTML = '<div style="height:calc(100vh - 56px);display:flex;flex-direction:column;"><div style="background:#fff;border-bottom:1px solid #e5e5e5;padding:12px 20px;display:flex;align-items:center;gap:16px;flex-shrink:0;"><span class="btn" onclick="showPage('chats')" style="cursor:pointer;">Назад</span><div><span style="font-weight:600;">' + chat.name + '</span>' + (chat.username ? '<span style="font-size:11px;color:#999;margin-left:8px;">@' + chat.username + '</span>' : '') + '</div><span style="font-size:11px;color:#777;margin-left:auto;">' + chat.participants.length + ' участников</span></div><div class="messages-area" id="chatMessages">' + msgsHTML + '</div><div class="message-input-area"><input type="text" id="messageInput" class="message-input" placeholder="Сообщение..." onkeydown="if(event.key==='Enter')sendChatMessage()"><button onclick="sendChatMessage()" class="btn-send">Отправить</button></div></div>';
     
     var msgArea = document.getElementById('chatMessages');
     if (msgArea) msgArea.scrollTop = msgArea.scrollHeight;
-    
     if (refreshInterval) clearInterval(refreshInterval);
     refreshInterval = setInterval(refreshChat, 1000);
 }
 
 function sendChatMessage() {
-    const input = document.getElementById('messageInput');
+    var input = document.getElementById('messageInput');
     if (!input) return;
-    const message = input.value.trim();
+    var message = input.value.trim();
     if (!message || !currentChat) return;
-    
-    addMessage(currentChat, {
-        username: currentUser.username,
-        message: message,
-        time: new Date().toLocaleTimeString('ru-RU', {hour:'2-digit',minute:'2-digit'})
-    });
-    
+    addMessage(currentChat, {username: currentUser.username, message: message});
     input.value = '';
     refreshChatDisplay();
 }
@@ -434,15 +561,15 @@ function refreshChat() {
 }
 
 function refreshChatDisplay() {
-    const msgs = getMessages(currentChat);
-    const container = document.getElementById('chatMessages');
+    var msgs = getMessages(currentChat);
+    var container = document.getElementById('chatMessages');
     if (!container) return;
-    const shouldScroll = container.scrollTop + container.clientHeight >= container.scrollHeight - 50;
+    var shouldScroll = container.scrollTop + container.clientHeight >= container.scrollHeight - 50;
     container.innerHTML = '';
-    msgs.forEach(function(msg) {
-        const isSent = msg.username === currentUser.username;
-        container.innerHTML += '<div class="message-bubble ' + (isSent ? 'message-sent' : 'message-received') + '">' + (!isSent ? '<div class="message-username">' + msg.username + '</div>' : '') + msg.message + '</div>';
-    });
+    for (var i = 0; i < msgs.length; i++) {
+        var isSent = msgs[i].username === currentUser.username;
+        container.innerHTML += '<div class="message-bubble ' + (isSent ? 'message-sent' : 'message-received') + '">' + (isSent ? '' : '<div class="message-username">' + msgs[i].username + '</div>') + msgs[i].message + '</div>';
+    }
     if (shouldScroll) container.scrollTop = container.scrollHeight;
 }
 
